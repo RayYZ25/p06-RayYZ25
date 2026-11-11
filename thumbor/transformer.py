@@ -96,8 +96,11 @@ class Transformer:
                 else:
                     self.target_height = float(self.context.request.height)
             else:
-                self.target_height = self.engine.get_proportional_height(
-                    self.context.request.width
+                self.target_height = max(
+                    1,
+                    self.engine.get_proportional_height(
+                        self.context.request.width
+                    ),
                 )
 
     def get_target_dimensions(self):
@@ -419,6 +422,9 @@ class Transformer:
         )
         self.context.request.width = int(max(requested_width, resize_width))
         self.context.request.height = int(max(requested_height, resize_height))
+
+        resize_width = max(1, resize_width)
+        resize_height = max(1, resize_height)
 
         self.engine.resize(resize_width, resize_height)
 
